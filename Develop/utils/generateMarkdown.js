@@ -102,7 +102,7 @@ This project is licensed under the [Mozilla Public License 2.0](https://opensour
 
 
 // TODO: Create a function to generate markdown for README
-function generateMarkdown(data) {
+function generateMarkdown(data, qandaURL) {
   return `
   # ${data.projectTitle}
   
@@ -112,7 +112,13 @@ function generateMarkdown(data) {
   ${data.description}
   
   ## Table of Contents
-  ${data.tableOfContents}
+  - [Description](#description)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [License](#license)
+  - [Contributing](#contributing)
+  - [Tests](#tests)
+  - [Questions](#questions)
   
   ## Installation
   ${data.installation}
@@ -129,9 +135,10 @@ function generateMarkdown(data) {
   ## Tests
   ${data.tests}
   
-  ## Questions and Answers
-  ${data.qanda}
+  ## Questions
+  If you have any questions, please feel free to contact me at [${data.email}](mailto:${data.email}) or visit my GitHub profile at (https://github.com/${data.githubUsername}).
   `;
-  }
+
+}
   
 module.exports = generateMarkdown;

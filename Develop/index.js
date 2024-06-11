@@ -23,7 +23,8 @@ const questions = [
     'license',
     'contributing',
     'tests',
-    'qanda'
+    'githubUsername',
+    'email'
 ];
 
 // TODO: Create a function to write README file
@@ -41,74 +42,83 @@ writeToFile('README.md', readmeContent, (err) => {
 
 
 // TODO: Create a function to initialize app
-function init() {
-    inquirer.prompt([
-        {
-            type: 'input',
-            name: 'projectTitle',
-            message: 'What is the title of your project?'
-        },
-        {
-            type: 'input',
-            name: 'description',
-            message: 'Provide a description of your project:'
-        },
-        {
-            type: 'input',
-            name: 'tableOfContents',
-            message: 'Provide a table of contents:'
-        },
-        {
-            type: 'input',
-            name: 'installation',
-            message: 'Explain how to install your project:'
-        },
-        {
-            type: 'input',
-            name: 'usage',
-            message: 'Provide instructions and examples for use:'
-        },
-        {
-            type: 'list',
-            name: 'license',
-            message: 'Indicate the project license:',
-            choices: licenseOptions
-        },
-        {
-            type: 'input',
-            name: 'contributing',
-            message: 'Explain how others can contribute to your project:'
-        },
-        {
-            type: 'input',
-            name: 'tests',
-            message: 'Provide examples on how to run tests:'
-        },
-        {
-            type: 'input',
-            name: 'qanda',
-            message: 'Provide any additional questions and answers:'
-        }
-    ]).then((data) => {
-        const readmeContent = generateMarkdown(data);
-        writeToFile('README.md', readmeContent);
-    }).catch((error) => {
-        console.error('Error occurred:', error);
-    });
+async function init() {
+    try {
+        const userData = await inquirer.prompt([
+            {
+                type: 'input',
+                name: 'projectTitle',
+                message: 'What is the title of your project?'
+            },
+            {
+                type: 'input',
+                name: 'description',
+                message: 'Provide a description of your project:'
+            },
+            {
+                type: 'input',
+                name: 'tableOfContents',
+                message: 'Provide a table of contents:'
+            },
+            {
+                type: 'input',
+                name: 'installation',
+                message: 'Explain how to install your project:'
+            },
+            {
+                type: 'input',
+                name: 'usage',
+                message: 'Provide instructions and examples for use:'
+            },
+            {
+                type: 'list',
+                name: 'license',
+                message: 'Indicate the project license:',
+                choices: licenseOptions
+            },
+            {
+                type: 'input',
+                name: 'contributing',
+                message: 'Explain how others can contribute to your project:'
+            },
+            {
+                type: 'input',
+                name: 'tests',
+                message: 'Provide examples on how to run tests:'
+            },
+            {
+                type: 'input',
+                name: 'githubUsername',
+                message: 'What is your GitHub username?'
+            },
+            {
+                type: 'input',
+                name: 'email',
+                message: 'What is your email?'
+            }
+        ]);
+
+        const qandaURL = `https://github.com/${userData.githubUsername}/`;
+        const readmeContent = generateMarkdown(userData, qandaURL);
+
+        await writeToFile('README.md', readmeContent);
+        console.log('README.md file has been successfully generated.');
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
 }
 
-// Function to write content to a file
-function writeToFile(fileName, readmeContent) {
-    fs.writeFile(fileName, readmeContent, (err) => {
-        if (err) {
-            console.error('Error writing to file:', err);
-        } else {
-            // console.log('Content has been written to README.md successfully.');
-        }
+function writeToFile(fileName, content) {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(fileName, content, (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
     });
 }
-
-
 
 // Function call to initialize app
 init();
