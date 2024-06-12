@@ -1,7 +1,5 @@
 
-
-// TODO: Create a function that returns a license badge based on which license is passed in
-// If there is no license, return an empty string
+// A function to render the License Badge based on user selection
 function renderLicenseBadge(license) {
   switch (license) {
       case 'MIT License':
@@ -26,8 +24,8 @@ function renderLicenseBadge(license) {
 }
 
 
-// TODO: Create a function that returns the license link
-// If there is no license, return an empty string
+
+// A function to render the License Link based on user selection
 function renderLicenseLink(license) {
   switch (license) {
       case 'MIT License':
@@ -51,8 +49,7 @@ function renderLicenseLink(license) {
   }
 }
 
-// TODO: Create a function that returns the license section of README
-// If there is no license, return an empty string
+// A function to render the License section on the README file
 function renderLicenseSection(license) {
   switch (license) {
       case 'MIT License':
@@ -101,7 +98,7 @@ This project is licensed under the [Mozilla Public License 2.0](https://opensour
 }
 
 
-// TODO: Create a function to generate markdown for README
+// A function to generate markdown for README
 function generateMarkdown(data, qandaURL) {
   return `
   # ${data.projectTitle}

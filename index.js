@@ -27,15 +27,15 @@ const questions = [
     'email'
 ];
 
-// TODO: Create a function to write README file
-const readmeContent = "" ;
-writeToFile('README.md', readmeContent, (err) => {
-    if (err) {
-        console.error('Error writing to file:', err);
-    } else {
-        // console.log('Content has been written to README.md successfully.');
-    }
-});
+// // TODO: Create a function to write README file
+// const readmeContent = "" ;
+// fs.writeFile('README.md', readmeContent, (err) => {
+//     if (err) {
+//         console.error('Error writing to file:', err);
+//     } else {
+//         // console.log('Content has been written to README.md successfully.');
+//     }
+// });
 
 
 
@@ -101,23 +101,21 @@ async function init() {
         const qandaURL = `https://github.com/${userData.githubUsername}/`;
         const readmeContent = generateMarkdown(userData, qandaURL);
 
-        await writeToFile('README.md', readmeContent);
+        writeToFile('README.md', readmeContent);
         console.log('README.md file has been successfully generated.');
     } catch (error) {
         console.error('An error occurred:', error);
     }
 }
 
-function writeToFile(fileName, content) {
-    return new Promise((resolve, reject) => {
-        fs.writeFile(fileName, content, (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
+function writeToFile(fileName, readmeContent) {
+   fs.writeFile(fileName, readmeContent, (err) => {
+    if (err) {
+        console.error('Error writing to file:', err);
+    } else {
+        // console.log('Content has been written to README.md successfully.');
+    }
+});
 }
 
 // Function call to initialize app
