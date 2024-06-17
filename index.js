@@ -77,25 +77,17 @@ async function init() {
         const qandaURL = `https://github.com/${userData.githubUsername}/`;
         const readmeContent = generateMarkdown(userData, qandaURL);
 
-        const readmeFilePath = 'README.md';
+        let readmeFilePath = 'README.md';
         if (fs.existsSync(readmeFilePath)) {
-            const overwrite = await inquirer.prompt({
-                type: 'confirm',
-                name: 'overwrite',
-                message: 'README.md already exists. Do you want to overwrite it?',
-                default: false
-            });
-
-            if (!overwrite.overwrite) {
-                console.log('Aborting... No changes made.');
-                return;
-            }
+            const timestamp = new Date().toISOString().replace(/:/g, '-'); // Generate timestamp
+            readmeFilePath = `README_${timestamp}.md`; // New filename with timestamp
+            console.log(`Creating new ${readmeFilePath} file...`);
         } else {
             console.log('Creating new README.md file...');
         }
 
         writeToFile(readmeFilePath, readmeContent);
-        console.log('README.md file has been successfully generated.');
+        console.log(`${readmeFilePath} file has been successfully generated.`);
     } catch (error) {
         console.error('An error occurred:', error);
     }
