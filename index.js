@@ -1,5 +1,6 @@
+// Importing necessary packages and files
 const inquirer = require('inquirer');
-const fs = require('fs')
+const fs = require('fs');
 const generateMarkdown = require('./utils/generateMarkdown.js');
 
 const licenseOptions = [
@@ -11,112 +12,103 @@ const licenseOptions = [
     'Creative Commons Zero v1.0 Universal',
     'Eclipse Public License 2.0',
     'Mozilla Public License 2.0'
-  ];
-
-// TODO: Create an arr ay of questions for user input
-const questions = [
-    'projectTitle',
-    'description',
-    'tableOfContents',
-    'installation',
-    'usage',
-    'license',
-    'contributing',
-    'tests',
-    'githubUsername',
-    'email'
 ];
 
-// // TODO: Create a function to write README file
-// const readmeContent = "" ;
-// fs.writeFile('README.md', readmeContent, (err) => {
-//     if (err) {
-//         console.error('Error writing to file:', err);
-//     } else {
-//         // console.log('Content has been written to README.md successfully.');
-//     }
-// });
+// Questions to be prompted for the user's input
+const questions = [
+    {
+        type: 'input',
+        name: 'projectTitle',
+        message: 'What is the title of your project?'
+    },
+    {
+        type: 'input',
+        name: 'description',
+        message: 'Provide a description of your project:'
+    },
+    {
+        type: 'input',
+        name: 'tableOfContents',
+        message: 'Provide a table of contents:'
+    },
+    {
+        type: 'input',
+        name: 'installation',
+        message: 'Explain how to install your project:'
+    },
+    {
+        type: 'input',
+        name: 'usage',
+        message: 'Provide instructions and examples for use:'
+    },
+    {
+        type: 'list',
+        name: 'license',
+        message: 'Indicate the project license:',
+        choices: licenseOptions
+    },
+    {
+        type: 'input',
+        name: 'contributing',
+        message: 'Explain how others can contribute to your project:'
+    },
+    {
+        type: 'input',
+        name: 'tests',
+        message: 'Provide examples on how to run tests:'
+    },
+    {
+        type: 'input',
+        name: 'githubUsername',
+        message: 'What is your GitHub username?'
+    },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'What is your email?'
+    }
+];
 
-
-
-
-
-// TODO: Create a function to initialize app
+// A function to initialize the app
 async function init() {
     try {
-        const userData = await inquirer.prompt([
-            {
-                type: 'input',
-                name: 'projectTitle',
-                message: 'What is the title of your project?'
-            },
-            {
-                type: 'input',
-                name: 'description',
-                message: 'Provide a description of your project:'
-            },
-            {
-                type: 'input',
-                name: 'tableOfContents',
-                message: 'Provide a table of contents:'
-            },
-            {
-                type: 'input',
-                name: 'installation',
-                message: 'Explain how to install your project:'
-            },
-            {
-                type: 'input',
-                name: 'usage',
-                message: 'Provide instructions and examples for use:'
-            },
-            {
-                type: 'list',
-                name: 'license',
-                message: 'Indicate the project license:',
-                choices: licenseOptions
-            },
-            {
-                type: 'input',
-                name: 'contributing',
-                message: 'Explain how others can contribute to your project:'
-            },
-            {
-                type: 'input',
-                name: 'tests',
-                message: 'Provide examples on how to run tests:'
-            },
-            {
-                type: 'input',
-                name: 'githubUsername',
-                message: 'What is your GitHub username?'
-            },
-            {
-                type: 'input',
-                name: 'email',
-                message: 'What is your email?'
-            }
-        ]);
+        const userData = await inquirer.prompt(questions);
 
         const qandaURL = `https://github.com/${userData.githubUsername}/`;
         const readmeContent = generateMarkdown(userData, qandaURL);
 
-        writeToFile('README.md', readmeContent);
+        const readmeFilePath = 'README.md';
+        if (fs.existsSync(readmeFilePath)) {
+            const overwrite = await inquirer.prompt({
+                type: 'confirm',
+                name: 'overwrite',
+                message: 'README.md already exists. Do you want to overwrite it?',
+                default: false
+            });
+
+            if (!overwrite.overwrite) {
+                console.log('Aborting... No changes made.');
+                return;
+            }
+        } else {
+            console.log('Creating new README.md file...');
+        }
+
+        writeToFile(readmeFilePath, readmeContent);
         console.log('README.md file has been successfully generated.');
     } catch (error) {
         console.error('An error occurred:', error);
     }
 }
-
+// A function to write to file that is created
 function writeToFile(fileName, readmeContent) {
-   fs.writeFile(fileName, readmeContent, (err) => {
-    if (err) {
-        console.error('Error writing to file:', err);
-    } else {
-        // console.log('Content has been written to README.md successfully.');
-    }
-});
+    fs.writeFile(fileName, readmeContent, (err) => {
+        if (err) {
+            console.error('Error writing to file:', err);
+        } else {
+            console.log('README.md file has been successfully written.');
+        }
+    });
 }
 
-// Function call to initialize app
-init();
+init(); // Function call to initialize app

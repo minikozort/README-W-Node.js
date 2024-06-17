@@ -137,5 +137,5 @@ function generateMarkdown(data, qandaURL) {
   `;
 
 }
-  
+// Exporting generateMarkdown.js
 module.exports = generateMarkdown;
